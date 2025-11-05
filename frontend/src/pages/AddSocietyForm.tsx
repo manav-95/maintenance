@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { FaBuilding } from 'react-icons/fa';
 
@@ -6,7 +7,7 @@ type FormState = {
     societyName: string;
     address: string;
     city: string;
-    pincode: string;
+    pinCode: string;
     state: string;
     // Manager Credentials
     managerName: string;
@@ -19,7 +20,7 @@ const defaultState: FormState = {
     societyName: '',
     address: '',
     city: '',
-    pincode: '',
+    pinCode: '',
     state: '',
     managerName: '',
     managerPhone: '',
@@ -44,8 +45,8 @@ const AddSocietyForm: React.FC = () => {
         if (!form.societyName.trim()) err.societyName = 'Society name is required';
         if (!form.address.trim()) err.address = 'Address is required';
         if (!form.city.trim()) err.city = 'City is required';
-        if (!form.pincode.trim()) err.pincode = 'Pincode is required';
-        else if (!/^\d{6}$/.test(form.pincode)) err.pincode = 'Enter valid 6-digit pincode';
+        if (!form.pinCode.trim()) err.pinCode = 'pinCode is required';
+        else if (!/^\d{6}$/.test(form.pinCode)) err.pinCode = 'Enter valid 6-digit pinCode';
 
         if (!form.state.trim()) err.state = 'State is required';
 
@@ -65,14 +66,19 @@ const AddSocietyForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSuccess(null);
-        if (!validate()) return;
+        if (!validate()) return alert('Please fix the errors in the form before submitting.');
         setSubmitting(true);
 
         try {
-            // TODO: Replace with your API call
-            console.log('Submit society:', form);
-            setSuccess('Society created successfully. Manager credentials have been set.');
-            setForm(defaultState);
+            const response = await axios.post(`${baseUrl}/society/create-society`, form);
+            if (response.status !== 200) {
+                console.log('Submit society:', form);
+                setSuccess('Society created successfully. Manager credentials have been set.');
+                alert(response.data?.message || 'Society and Manager created successfully.');
+                setForm(defaultState);
+            } else {
+                alert('Failed to create society. Please try again.');
+            }
         } catch (err) {
             console.error(err);
             setErrors({ general: 'Failed to create society. Please try again.' });
@@ -127,16 +133,16 @@ const AddSocietyForm: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Pincode</label>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">pinCode</label>
                                 <input
-                                    name="pincode"
-                                    value={form.pincode}
+                                    name="pinCode"
+                                    value={form.pinCode}
                                     onChange={handleChange}
-                                    placeholder="6-digit pincode"
+                                    placeholder="6-digit pinCode"
                                     maxLength={6}
-                                    className={`w-full rounded-sm border px-3 py-2 text-sm focus:outline-none focus:ring-2 transition ${errors.pincode ? 'border-red-300' : 'border-slate-200'}`}
+                                    className={`w-full rounded-sm border px-3 py-2 text-sm focus:outline-none focus:ring-2 transition ${errors.pinCode ? 'border-red-300' : 'border-slate-200'}`}
                                 />
-                                {errors.pincode && <p className="mt-1 text-xs text-red-600">{errors.pincode}</p>}
+                                {errors.pinCode && <p className="mt-1 text-xs text-red-600">{errors.pinCode}</p>}
                             </div>
 
                             <div className=''>
@@ -152,7 +158,7 @@ const AddSocietyForm: React.FC = () => {
                             </div>
 
 
-                             <div className='col-span-2'>
+                            <div className='col-span-2'>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Address</label>
                                 <input
                                     name="address"
