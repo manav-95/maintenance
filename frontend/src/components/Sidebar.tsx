@@ -1,10 +1,11 @@
 import React, { useMemo, type JSX } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaUserPlus, FaThumbsDown, FaUsersCog } from 'react-icons/fa';
+import { FaUserPlus, FaThumbsDown, FaUsersCog, FaFileUpload } from 'react-icons/fa';
 import { MdDashboard, MdPayments } from 'react-icons/md';
 import { useAuth } from '../context/AuthContext'
 import { BiLogOut, BiBuildings } from 'react-icons/bi';
 import { TbBuildingPlus } from "react-icons/tb";
+import { RiCoinsFill } from 'react-icons/ri';
 
 
 const Sidebar: React.FC = () => {
@@ -20,6 +21,9 @@ const Sidebar: React.FC = () => {
             { to: '/dashboard', label: 'Dashboard', icon: <MdDashboard /> },
             { to: '/add-members', label: 'Add Members', icon: <FaUserPlus /> },
             { to: '/manage-members', label: 'Manage Members', icon: <FaUsersCog /> },
+            { to: '/upload-documents', label: 'Upload Documents', icon: <FaFileUpload /> },
+            { to: '/payments', label: 'Payments', icon: <MdPayments /> },
+            { to: '/expenses', label: 'Expenses', icon: <RiCoinsFill /> },
         ],
         member: [
             { to: '/dashboard', label: 'Dashboard', icon: <MdDashboard /> },

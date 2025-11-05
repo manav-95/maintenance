@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
-import { nav } from 'framer-motion/client';
 
 const Login = () => {
 

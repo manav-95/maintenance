@@ -8,6 +8,7 @@ import ComplaintForm from "./pages/ComplaintForm"
 import AddSocietyForm from "./pages/AddSocietyForm"
 import ManageSocieties from "./pages/ManageSocieties"
 import AddMembers from "./pages/AddMembers"
+import ManageMembers from "./pages/ManageMembers"
 
 
 const AppRoutes = () => {
@@ -64,6 +65,13 @@ const AppRoutes = () => {
             path="add-members"
             element={<AddMembers />}
           />
+          <Route
+            path="/manage-members"
+            element={<ManageMembers />}
+          />
+          <Route path="upload-documents" element={<div className="p-4">Upload Documents handles here</div>} />
+          <Route path="payments" element={<div className="p-4">Payments handles here</div>} />
+          <Route path="expenses" element={<div className="p-4">Expenses handles here</div>} />
         </Route>
       )}
 

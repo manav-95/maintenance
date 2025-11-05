@@ -8,6 +8,8 @@ interface User {
     phone: string;
     email: string;
     role: string;
+    flat: string;
+    societyId: string;
 }
 
 interface AuthContextType {
@@ -27,6 +29,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [accessToken, setAccessToken] = useState<string | null>(() => localStorage.getItem("accessToken"));
 
     const login = (userData: User, token: string) => {
+        console.log("🚀 Logged in user:", userData);
         setUser(userData);
         setAccessToken(token);
         localStorage.setItem("user", JSON.stringify(userData));

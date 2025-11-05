@@ -52,7 +52,7 @@ export const loginUser = async (req, res) => {
             }
         )
 
-        res.json({ accessToken, user: { id: user._id, name: user.name, phone: user.phone, email: user.email, role: user.role } });
+        res.json({ accessToken, user: { id: user._id, name: user.name, phone: user.phone, email: user.email, role: user.role, societyId: user.society, flat: user.flat } });
 
     } catch (error) {
         console.error(error);

@@ -7,13 +7,13 @@ dotenv.config();
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
 });
 
 
@@ -117,24 +117,24 @@ const buildManagerInviteEmail = ({ managerName, managerEmail, managerPassword, s
 
 // simple helper to escape text for HTML insertion
 function escapeHtml(unsafe) {
-    if (!unsafe && unsafe !== 0) return "";
-    return String(unsafe)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+  if (!unsafe && unsafe !== 0) return "";
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 // helper for escaping attribute values (slightly different handling)
 function escapeAttr(unsafe) {
-    return escapeHtml(unsafe).replace(/"/g, "&quot;");
+  return escapeHtml(unsafe).replace(/"/g, "&quot;");
 }
 
 
 
 const buildManagerInviteText = ({ managerName, managerEmail, managerPassword, societyName, loginUrl }) =>
-    `Welcome ${managerName},
+  `Welcome ${managerName},
 
 A society "${societyName}" has been created and you are assigned as manager.
 
@@ -151,75 +151,75 @@ Please change your password after first login. If you did not request this, cont
 
 
 export const createSociety = async (req, res) => {
-    try {
-        const { societyName, address, city, state, pinCode, managerName, managerEmail, managerPhone, managerPassword } = req.body;
+  try {
+    const { societyName, address, city, state, pinCode, managerName, managerEmail, managerPhone, managerPassword } = req.body;
 
-        if (!societyName || !address || !city || !state || !pinCode || !managerName || !managerEmail || !managerPhone || !managerPassword) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-        // Create Manager User
-        const manager = await User.create({
-            name: managerName,
-            email: managerEmail,
-            phone: managerPhone,
-            password: managerPassword,
-            role: 'admin'
-        });
-
-        // Create Society and Assign Manager
-        const society = await Society.create({
-            name: societyName,
-            address,
-            city,
-            state,
-            pinCode,
-            manager: manager._id
-        });
-
-        // Link Manager to Society
-        manager.society = society._id;
-        const saved = await manager.save();
-
-        if (saved) {
-
-            const html = buildManagerInviteEmail({
-                managerName: manager.name,
-                managerEmail: manager.email,
-                managerPassword: managerPassword, // consider sending a reset link instead in prod
-                societyName: society.name,
-                loginUrl: process.env.APP_URL
-            });
-
-            const text = buildManagerInviteText({
-                managerName: manager.name,
-                managerEmail: manager.email,
-                managerPassword: managerPassword,
-                societyName: society.name,
-                loginUrl: process.env.APP_URL
-            });
-
-            try {
-                const info = await transporter.sendMail({
-                    from: `"Maintenance PRO" <${process.env.EMAIL_USER}>`,
-                    to: managerEmail,
-                    subject: "Manager Credentials",
-                    html,
-                    text,
-                });
-
-                console.log("Message sent:", info.response);
-            } catch (mailError) {
-                console.error("❌ Failed to send email:", mailError);
-            }
-        }
-
-        return res.status(201).json({ message: 'Society and manager created', society, manager });
-
-
-    } catch (error) {
-        console.error('Failed To Create Society And Manager:', error);
-        return res.status(500).json({ message: 'Server error', error: error.message });
+    if (!societyName || !address || !city || !state || !pinCode || !managerName || !managerEmail || !managerPhone || !managerPassword) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
+    // Create Manager User
+    const manager = await User.create({
+      name: managerName,
+      email: managerEmail,
+      phone: managerPhone,
+      password: managerPassword,
+      role: 'admin'
+    });
+
+    // Create Society and Assign Manager
+    const society = await Society.create({
+      name: societyName,
+      address,
+      city,
+      state,
+      pinCode,
+      manager: manager._id
+    });
+
+    // Link Manager to Society
+    manager.society = society._id;
+    const saved = await manager.save();
+
+    if (saved) {
+
+      const html = buildManagerInviteEmail({
+        managerName: manager.name,
+        managerEmail: manager.email,
+        managerPassword: managerPassword, // consider sending a reset link instead in prod
+        societyName: society.name,
+        loginUrl: process.env.APP_URL
+      });
+
+      const text = buildManagerInviteText({
+        managerName: manager.name,
+        managerEmail: manager.email,
+        managerPassword: managerPassword,
+        societyName: society.name,
+        loginUrl: process.env.APP_URL
+      });
+
+      try {
+        const info = await transporter.sendMail({
+          from: `"Maintenance PRO" <${process.env.EMAIL_USER}>`,
+          to: managerEmail,
+          subject: "Manager Credentials",
+          html,
+          text,
+        });
+
+        console.log("Message sent:", info.response);
+      } catch (mailError) {
+        console.error("❌ Failed to send email:", mailError);
+      }
+    }
+
+    return res.status(201).json({ message: 'Society and manager created', society, manager });
+
+
+  } catch (error) {
+    console.error('Failed To Create Society And Manager:', error);
+    return res.status(500).json({ message: 'Server error', error: error.message });
+  }
 }
 
 
@@ -237,3 +237,77 @@ export const createSociety = async (req, res) => {
 //         return res.status(500).json({ message: 'Server error', error: error.message });
 //     }
 // }
+
+
+export const addSocietyMembers = async (req, res) => {
+  try {
+    const {
+      flatNo,
+      fullName,
+      phone,
+      email,
+      password,
+      societyId,
+    } = req.body;
+
+    if (!flatNo || !fullName || !phone || !email || !password || !societyId) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const society = await Society.findById(societyId);
+    if (!society) {
+      return res.status(404).json({ message: 'Society not found' });
+    }
+    const newMember = await User.create({
+      name: fullName,
+      email,
+      phone,
+      password,
+      flat: flatNo,
+      society: society._id,
+    })
+
+    await newMember.save();
+
+    await society.members.push(newMember._id);
+    await society.save();
+
+    try {
+      const info = await transporter.sendMail({
+        from: `"Maintenance PRO" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "Member Credentials",
+        html: `<p>Welcome ${fullName},</p>
+                <p>You have been added as a member to the society "${society.name}".</p>
+                <p>Your credentials are as follows:</p> 
+                <ul>
+                <li>Email: ${email}</li>
+                <li>Password: ${password}</li>
+                </ul>
+                <p>Please log in at ${process.env.APP_URL} and change your password after your first login.</p>
+                <p>If you did not expect this email, please contact your society manager.</p>
+          `,
+        text: `Welcome ${fullName}, 
+                You have been added as a member to the society "${society.name}".
+                Your credentials are as follows:
+                Email: ${email}
+                Password: ${password}
+                Please log in at ${process.env.APP_URL} and change your password after your first login.
+                If you did not expect this email, please contact your society manager.
+          `,
+      });
+
+      console.log("Message sent:", info.response);
+    } catch (mailError) {
+      console.error("❌ Failed to send email:", mailError);
+    }
+
+
+
+    return res.status(201).json({ message: 'Member added successfully', member: newMember });
+
+  } catch (error) {
+    console.error('Failed To Add Society Member:', error);
+    return res.status(500).json({ message: 'Server error', error: error.message });
+  }
+}
