@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import { FaBuilding, FaSignInAlt, FaEye, FaEyeSlash } from 'react-icons/fa';
 
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
+
+import { useNavigate } from 'react-router-dom';
+import { nav } from 'framer-motion/client';
+
 const Login = () => {
-	const [form, setForm] = useState({ email: '', password: '' });
+
+	const { login } = useAuth();
+	const navigate = useNavigate();
+
+	const [form, setForm] = useState({ phone: '', password: '' });
 	const [errors, setErrors] = useState<Record<string, string>>({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
@@ -12,24 +22,42 @@ const Login = () => {
 
 	const validate = () => {
 		const err: Record<string, string> = {};
-		if (!form.email) err.email = 'Email is required';
-		else if (!/^\S+@\S+\.\S+$/.test(form.email)) err.email = 'Enter a valid email';
+		if (!form.phone) err.phone = 'Phone is required';
+		else if (form.phone.length < 10) err.phone = 'Please enter a valid phone number';
 		if (!form.password) err.password = 'Password is required';
 		else if (form.password.length < 6) err.password = 'Password must be at least 6 characters';
 		setErrors(err);
 		return Object.keys(err).length === 0;
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (validate()) {
-			setSubmitted(true);
-			// TODO: replace with real auth call
-			console.log('Login payload:', form);
-		} else {
+		setSubmitted(true);
+		try {
+			if (validate()) {
+				const res = await axios.post(`${baseUrl}/auth/login`, form, {
+					withCredentials: true
+				});
+
+				// console.log('Login response:', res);
+				if (res.status === 200 && res.data.accessToken) {
+					login(res.data.user, res.data.accessToken);
+					alert('Login successful!');
+					navigate('/dashboard');
+				} else {
+					setErrors({ general: res.data.message || 'Login failed' });
+					alert(res.data.message || 'Login failed');
+					setSubmitted(false);
+				}
+			} else {
+				setSubmitted(false);
+			}
+		} catch (error) {
+			console.error('Login error:', error);
 			setSubmitted(false);
 		}
 	};
+
 
 	return (
 		<div
@@ -54,18 +82,19 @@ const Login = () => {
 
 					{/* Email */}
 					<div>
-						<label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+						<label className="block text-sm font-medium text-slate-700 mb-1">Phone</label>
 						<input
-							name="email"
-							type="email"
-							value={form.email}
+							name="phone"
+							type="tel"
+							value={form.phone}
+							maxLength={10}
 							onChange={handleChange}
-							placeholder="you@example.com"
-							className={`w-full px-4 py-3 rounded-sm border text-sm focus:outline-none focus:ring-2 transition ${errors.email ? 'border-red-300 focus:ring-red-200' : 'border-slate-200 focus:ring-primary/30'}`}
-							aria-invalid={!!errors.email}
-							aria-describedby={errors.email ? 'email-error' : undefined}
+							placeholder="Enter Phone Number"
+							className={`w-full px-4 py-3 rounded-sm border text-sm focus:outline-none focus:ring-2 transition ${errors.phone ? 'border-red-300 focus:ring-red-200' : 'border-slate-200 focus:ring-primary/30'}`}
+							aria-invalid={!!errors.phone}
+							aria-describedby={errors.phone ? 'phone-error' : undefined}
 						/>
-						{errors.email && <p id="email-error" className="mt-2 text-xs text-red-600">{errors.email}</p>}
+						{errors.phone && <p id="phone-error" className="mt-2 text-xs text-red-600">{errors.phone}</p>}
 					</div>
 
 					{/* Password */}
@@ -99,12 +128,25 @@ const Login = () => {
 						<a href="/forgot-password" className="text-primary hover:underline">Forgot password?</a>
 					</div>
 
-					<button type="submit" className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-primary text-white rounded-sm font-semibold">
-						<FaSignInAlt className="w-4 h-4" />
-						<span>Sign in</span>
+					<button
+						type="submit"
+						className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-primary text-white rounded-sm font-semibold disabled:opacity-70 disabled:cursor-not-allowed"
+						disabled={submitted}
+					>
+						{submitted ? (
+							<>
+								<div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+								<span>Signing In...</span>
+							</>
+						) : (
+							<>
+								<FaSignInAlt className="w-5 h-5" />
+								Sign In
+							</>
+						)}
 					</button>
 
-					{submitted && <p className="mt-1 text-sm text-green-600">Credentials look good. Ready to sign in.</p>}
+
 
 					<p className="mt-2 text-center text-sm text-slate-600">
 						Don't have an account? <a href="/register" className="text-primary font-medium hover:underline">Register</a>

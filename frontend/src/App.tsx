@@ -1,25 +1,101 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
 import Layout from "./Layout"
+import { AuthProvider, useAuth } from "./context/AuthContext"
+import { useEffect } from "react"
+import ComplaintForm from "./pages/ComplaintForm"
+import AddSocietyForm from "./pages/AddSocietyForm"
+import ManageSocieties from "./pages/ManageSocieties"
+import AddMembers from "./pages/AddMembers"
+
+
+const AppRoutes = () => {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    console.log("Current user:", user?.role);
+  }, [user]);
+
+  // No user (not logged in)
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path='*' element={
+          <div className="flex flex-col flex-1 justify-center items-center h-screen space-y-2">
+            <h1 className="text-2xl">welcome to the society maintenance app</h1>
+            <Link to='/login' className="bg-primary/80 hover:bg-primary transition-all text-card px-4 py-2 rounded-lg">Click here to Login</Link>
+          </div>
+        } />
+      </Routes>
+    );
+  }
+
+  // User is logged in, show role-based routes
+  return (
+    <Routes>
+      {user.role === "superAdmin" && (
+        <Route path="/" element={<Layout />}>
+          <Route
+            path="dashboard"
+            element={<div className="p-4">Welcome to the SuperAdmin Dashboard</div>}
+          />
+          <Route
+            path="add-society"
+            element={<AddSocietyForm />}
+          />
+          <Route
+            path="manage-societies"
+            element={<ManageSocieties />}
+          />
+
+        </Route>
+      )}
+
+      {user.role === "admin" && (
+        <Route path="/" element={<Layout />}>
+          <Route
+            path="dashboard"
+            element={<div className="p-4">Welcome to the Admin Dashboard</div>}
+          />
+          <Route
+            path="add-members"
+            element={<AddMembers />}
+          />
+        </Route>
+      )}
+
+      {user.role === "member" && (
+        <Route path="/" element={<Layout />}>
+          <Route
+            path="dashboard"
+            element={<div className="p-4">Welcome to the Member Dashboard</div>}
+          />
+          <Route
+            path="complaint-form"
+            element={<ComplaintForm />}
+          />
+          <Route
+            path="my-payments"
+            element={<div className="p-4">My Payments handles here</div>}
+          />
+        </Route>
+      )}
+    </Routes>
+  );
+};
+
 const App = () => {
   return (
-    <>
-      <Router>
-        <Routes>
-          {/* Authentication Routes  */}
-          <Route path={'/register'} element={<Register />} />
-          <Route path={'/login'} element={<Login />} />
+    <Router>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </Router>
+  );
 
-          <Route path="/admin" element={<Layout />} >
-            <Route path="dashboard" element={<div className="p-4">Welcome to the Admin Dashboard</div>} />
-            <Route path="form" element={<div className="p-4">Welcome to the Admin form</div>} />
-          </Route>
-
-        </Routes>
-      </Router>
-    </>
-  )
 }
 
 export default App

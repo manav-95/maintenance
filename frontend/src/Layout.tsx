@@ -20,14 +20,14 @@ const Layout: React.FC = () => {
         </header>
 
         {/* Main layout */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start">
-          <aside className="hidden md:block md:col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start h-[calc(100vh-5.5rem)]">
+          <aside className="hidden md:block md:col-span-1 h-full ">
             <Sidebar />
           </aside>
 
-          <main className="col-span-1 md:col-span-4">
+          <main className="col-span-1 md:col-span-4 bg-card h-full overflow-hidden">
             {/* Outlet renders route content */}
-            <div className="bg-transparent">
+            <div className="h-full overflow-y-auto">
               <Outlet />
             </div>
           </main>
