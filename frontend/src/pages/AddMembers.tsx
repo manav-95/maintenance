@@ -56,7 +56,7 @@ const AddMembers: React.FC = () => {
         try {
 
             const response = await axios.post(`${baseUrl}/society/add-member`, {
-                societyId: user?.societyId,
+                societyId: user?.society?._id,
                 ...form
             })
 
@@ -88,7 +88,7 @@ const AddMembers: React.FC = () => {
                         </h2>
                         <p className="text-sm text-slate-500 mt-1">Add a new resident to the society.</p>
                     </div>
-                    <span className='text-sm font-semibold bg-primary/90 text-card px-3 py-1.5 rounded'>Society-ID: {user?.societyId}</span>
+                    <span className='text-sm font-semibold bg-primary/90 text-card px-3 py-1.5 rounded'>Society Name: {user?.society?.name}</span>
                 </div>
 
                 {errors.general && <div className="text-xs text-red-600">{errors.general}</div>}

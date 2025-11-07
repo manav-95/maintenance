@@ -24,7 +24,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     try {
         const { phone, password } = req.body;
-        const user = await User.findOne({ phone });
+        const user = await User.findOne({ phone }).populate('society', 'id name');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -52,7 +52,7 @@ export const loginUser = async (req, res) => {
             }
         )
 
-        res.json({ accessToken, user: { id: user._id, name: user.name, phone: user.phone, email: user.email, role: user.role, societyId: user.society, flat: user.flat } });
+        res.json({ accessToken, user: { id: user._id, name: user.name, phone: user.phone, email: user.email, role: user.role, society: user.society, flat: user.flat } });
 
     } catch (error) {
         console.error(error);

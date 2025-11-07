@@ -9,7 +9,10 @@ interface User {
     email: string;
     role: string;
     flat: string;
-    societyId: string;
+    society: {
+        _id: string;
+        name: string;
+    };
 }
 
 interface AuthContextType {
@@ -79,6 +82,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             logout();
         }
     };
+
+    useEffect(() => {
+        console.log("User: ", user);
+    }, []);
 
     useEffect(() => {
          console.log("🚀 AuthProvider mounted — starting token refresh interval...");

@@ -6,6 +6,7 @@ import connectDB from './db/dbConfig.js';
 
 import authRoutes from './routes/auth.routes.js';
 import societyRoutes from './routes/society.routes.js';
+import documentRoutes from './routes/document.routes.js';
 
 const app = express();
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/society', societyRoutes);
+app.use('/api/document', documentRoutes);
 
 const PORT = process.env.PORT || 5000;
 
