@@ -42,7 +42,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Layout />}>
           <Route
             path="dashboard"
-            element={<div className="p-4">Welcome to the SuperAdmin Dashboard</div>}
+            element={<div className="p-4">Welcome to the SuperAdmin Dashboard fgajgjasgasjdg</div>}
           />
           <Route
             path="add-society"
