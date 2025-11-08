@@ -29,7 +29,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path='*' element={
+        <Route index path='/' element={
           <div className="flex flex-col flex-1 justify-center items-center h-screen space-y-2">
             <h1 className="text-2xl">welcome to the society maintenance app</h1>
             <Link to='/login' className="bg-primary/80 hover:bg-primary transition-all text-card px-4 py-2 rounded-lg">Click here to Login</Link>
