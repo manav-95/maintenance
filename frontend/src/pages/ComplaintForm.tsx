@@ -193,18 +193,18 @@ const ComplaintForm: React.FC = () => {
                             {preview && <img src={preview} alt="preview" className="mt-2 w-32 h-20 object-cover rounded-sm border" />}
                         </div>
                     </div>
+                    <div className="flex justify-end">
+                        <button
+                            type="submit"
+                            disabled={submitting}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm rounded-sm hover:brightness-95 disabled:opacity-70"
+                        >
+                            <FaPaperPlane />
+                            {submitting ? 'Submitting...' : 'Submit Complaint'}
+                        </button>
+                    </div>
                 </div>
 
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        disabled={submitting}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm rounded-sm hover:brightness-95 disabled:opacity-70"
-                    >
-                        <FaPaperPlane />
-                        {submitting ? 'Submitting...' : 'Submit Complaint'}
-                    </button>
-                </div>
             </form>
         </div>
     );
