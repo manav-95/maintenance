@@ -82,8 +82,7 @@ dump/
 *.sqlite
 
 # Uploaded files (if using multer or file uploads)
-uploads/
-backend/uploads/
+
 storage/
 public/uploads/
 
