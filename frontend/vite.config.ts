@@ -5,6 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   define: {
-    baseUrl: JSON.stringify('http://localhost:5000/api')
+    baseUrl: JSON.stringify('https://maintenance-mwp7.onrender.com/api')
   }
 })

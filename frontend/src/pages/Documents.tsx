@@ -24,7 +24,7 @@ const Documents: React.FC = () => {
     const [search, setSearch] = useState('');
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
-    const BACKEND_URL = "http://localhost:5000";
+    const BACKEND_URL = "https://maintenance-mwp7.onrender.com";
 
     const fetchDocuments = async () => {
         setLoading(true);
