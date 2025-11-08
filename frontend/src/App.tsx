@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/AdminDashboard"
 import AdminExpense from "./pages/AdminExpense"
 import PaymentHandler from "./pages/PaymentHandler"
 import Documents from "./pages/Documents"
+import AdminMaintenanceDashboard from "./pages/AdminMaintenanceDashboard"
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -46,7 +47,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Layout />}>
           <Route
             path="dashboard"
-            element={<AdminDashboard/>}
+            element={<AdminMaintenanceDashboard/>}
           />
           <Route
             path="add-society"
@@ -64,7 +65,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Layout />}>
           <Route
             path="dashboard"
-            element={<AdminDashboard/>}
+            element={<AdminMaintenanceDashboard/>}
           />
           <Route
             path="add-members"
@@ -84,7 +85,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Layout />}>
           <Route
             path="dashboard"
-            element={<AdminDashboard/>}
+            element={<AdminMaintenanceDashboard/>}
           />
           <Route
             path="complaint-form"
