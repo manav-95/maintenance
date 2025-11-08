@@ -14,6 +14,7 @@ import AddPayments from "./pages/AddPayments"
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminExpense from "./pages/AdminExpense"
 import PaymentHandler from "./pages/PaymentHandler"
+import Documents from "./pages/Documents"
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -92,6 +93,10 @@ const AppRoutes = () => {
           <Route
             path="my-payments"
             element={<PaymentHandler/>}
+          />
+          <Route
+            path="documents"
+            element={<Documents/>}
           />
         </Route>
       )}

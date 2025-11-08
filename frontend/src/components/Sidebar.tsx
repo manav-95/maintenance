@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { BiLogOut, BiBuildings } from 'react-icons/bi';
 import { TbBuildingPlus } from "react-icons/tb";
 import { RiCoinsFill } from 'react-icons/ri';
+import { IoDocumentSharp } from 'react-icons/io5';
 
 
 const Sidebar: React.FC = () => {
@@ -29,6 +30,7 @@ const Sidebar: React.FC = () => {
             { to: '/dashboard', label: 'Dashboard', icon: <MdDashboard /> },
             { to: '/complaint-form', label: 'Raise Complaint', icon: <FaThumbsDown /> },
             { to: '/my-payments', label: 'My Payments', icon: <MdPayments /> },
+            { to: '/documents', label: 'documents', icon: <IoDocumentSharp /> },
         ],
     }
 

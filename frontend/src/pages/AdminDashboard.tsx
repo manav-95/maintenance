@@ -98,15 +98,13 @@ export default function TreasurerDashboard() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className=" h-screen bg-gray-50">
 {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
+      {/* <div className="flex-1 flex flex-col overflow-hidden">
           <h1 className="text-2xl font-bold text-gray-900">
             Admin Dashboard
           </h1>
-          <div className="w-10" />
-        </div>
+        </div> */}
 
         {/* Content Area */}
         <div className="flex-1 overflow-auto p-8">
