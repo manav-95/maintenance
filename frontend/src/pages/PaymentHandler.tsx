@@ -30,7 +30,7 @@ export default function PaymentHandler() {
             {pending.map((p) => (
               <tr key={p.id} className="border-b last:border-none">
                 <td className="p-2">{p.payer}</td>
-                <td className="p-2 font-semibold">${p.amount}</td>
+                <td className="p-2 font-semibold">₹{p.amount}</td>
                 <td className="p-2 text-yellow-600 font-medium">Pending</td>
               </tr>
             ))}
@@ -53,7 +53,7 @@ export default function PaymentHandler() {
             {done.map((p) => (
               <tr key={p.id} className="border-b last:border-none">
                 <td className="p-2">{p.payer}</td>
-                <td className="p-2 font-semibold">${p.amount}</td>
+                <td className="p-2 font-semibold">₹{p.amount}</td>
                 <td className="p-2 text-green-600 font-medium">Done</td>
               </tr>
             ))}
