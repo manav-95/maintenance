@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   define: {
     baseUrl: JSON.stringify('https://maintenance-mwp7.onrender.com/api')
+   // baseUrl: JSON.stringify('http://localhost:5000/api')
   }
 })

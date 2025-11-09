@@ -13,6 +13,7 @@ import {
   ResponsiveContainer,
   Cell
 } from 'recharts';
+import { FaRupeeSign } from 'react-icons/fa';
 
 export default function AdminMaintenanceDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -80,12 +81,12 @@ export default function AdminMaintenanceDashboard() {
     <div className="min-h-screen bg-gray-50 p-8">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-4xl font-bold text-gray-900">Admin Maintenance Dashboard</h1>
-        <p className="text-gray-600 mt-2 text-lg">Flatshare Society - Complete Maintenance Overview</p>
+        <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-600 mt-2 text-lg">Complete Maintenance Overview</p>
       </div>
 
       {/* Top Stats */}
-      <div className="grid grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-2  lg:grid-cols-4 gap-6 mb-10">
         <div className="bg-white rounded-lg shadow-md p-8 border-l-4 border-orange-500 hover:shadow-lg transition">
           <div className="flex items-center justify-between">
             <div>
@@ -125,7 +126,7 @@ export default function AdminMaintenanceDashboard() {
                 ₹{maintenanceStats.spent.toLocaleString()} / ₹{maintenanceStats.monthlyBudget.toLocaleString()}
               </p>
             </div>
-            <DollarSign className="w-16 h-16 text-purple-500 opacity-15" />
+            <FaRupeeSign className="w-16 h-16 text-purple-500 opacity-15" />
           </div>
         </div>
       </div>
@@ -156,7 +157,8 @@ export default function AdminMaintenanceDashboard() {
 
       {/* Overview Tab */}
       {activeTab === 'overview' && (
-        <div className="grid grid-cols-2 gap-8">
+        <>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Complaints Trend */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
@@ -179,7 +181,7 @@ export default function AdminMaintenanceDashboard() {
           {/* Expense Breakdown */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-              <DollarSign className="w-6 h-6 text-purple-600" />
+              <FaRupeeSign className="w-6 h-6 text-purple-600" />
               Expense Breakdown
             </h2>
             <ResponsiveContainer width="100%" height={350}>
@@ -203,8 +205,9 @@ export default function AdminMaintenanceDashboard() {
             </ResponsiveContainer>
           </div>
 
+        </div>
           {/* Monthly Budget */}
-          <div className="bg-white rounded-lg shadow-md p-8 col-span-2">
+          <div className="bg-white rounded-lg shadow-md p-8 mt-8">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Monthly Budget Status</h2>
             <div className="space-y-6">
               <div>
@@ -219,7 +222,7 @@ export default function AdminMaintenanceDashboard() {
               <p className="text-base text-gray-600">₹17,500 remaining • 25 days left in November</p>
             </div>
           </div>
-        </div>
+          </>
       )}
 
       {/* Recent Maintenance Tab */}
