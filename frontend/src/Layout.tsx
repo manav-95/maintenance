@@ -64,7 +64,7 @@ const Layout: React.FC = () => {
             <button
               onClick={() => setMenu(true)}
             >
-              <FaBars className='text-2xl'/>
+              <FaBars className='text-2xl' />
             </button>
           </div>
         </header>
@@ -88,16 +88,16 @@ const Layout: React.FC = () => {
                 <span>{link.label}</span>
               </NavLink>
             ))}
+            <div className='p-2'>
+              <button
+                onClick={() => logout()}
+                className='flex justify-center items-center px-4 py-2 text-lg bg-red-500 text-card w-full'
+              >
+                <BiLogOut className='text-xl mr-3' />
+                <span>Logout</span>
+              </button>
+            </div>
           </ul>
-          <div className='p-2'>
-            <button
-            onClick={() => logout()}
-            className='flex justify-center items-center px-4 py-2 text-lg bg-red-500 text-card w-full'
-          >
-            <BiLogOut className='text-xl mr-3' />
-            <span>Logout</span>
-          </button>
-          </div>
         </div>
 
         {/* Main layout */}

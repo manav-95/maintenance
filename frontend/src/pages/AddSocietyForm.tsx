@@ -101,7 +101,7 @@ const AddSocietyForm: React.FC = () => {
 
                 {/* Society Details Section */}
                 <div className="space-y-6">
-                    <div className="lg-flex items-center gap-2 border-t border-slate-200 pt-6">
+                    <div className="flex items-center gap-2 border-t border-slate-200 pt-6">
                         <FaBuilding className="w-5 h-5 text-primary" />
                         <h3 className="text-lg font-bold text-slate-900">Society Details</h3>
                     </div>
@@ -175,7 +175,7 @@ const AddSocietyForm: React.FC = () => {
 
                 {/* Manager Credentials Section */}
                 <div className="space-y-6">
-                    <div className="lg-flex items-center gap-2 border-t border-slate-200 pt-6">
+                    <div className="flex items-center gap-2 border-t border-slate-200 pt-6">
                         <svg className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
@@ -238,7 +238,7 @@ const AddSocietyForm: React.FC = () => {
                 </div>
 
                 {/* Submit Button */}
-                <div className="lg-flex justify-end pb-3">
+                <div className="flex justify-end pb-3">
                     <button
                         type="submit"
                         disabled={submitting}
