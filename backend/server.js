@@ -2,22 +2,17 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import connectDB from './db/dbConfig.js';
+import connectDB from './config/dbConfig.js';
 
 import authRoutes from './routes/auth.routes.js';
 import societyRoutes from './routes/society.routes.js';
 import documentRoutes from './routes/document.routes.js';
 
-import { fileURLToPath } from 'url';
-import path from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 dotenv.config();
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connect to MongoDB
 connectDB();

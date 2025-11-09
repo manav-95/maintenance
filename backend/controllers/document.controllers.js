@@ -20,7 +20,7 @@ export const uploadDocument = async (req, res) => {
         // Map uploaded files
         const uploadedFiles = req.files.map(file => ({
             filename: file.originalname,
-            path: `/uploads/documents/${file.filename}`,
+            path: file.path,
             mimetype: file.mimetype,
             size: file.size,
         }));
