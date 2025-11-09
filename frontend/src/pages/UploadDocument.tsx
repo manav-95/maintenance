@@ -84,8 +84,8 @@ const UploadDocument: React.FC = () => {
                 alert( response.data.message ||'Failed to upload documents. Please try again.');
             }
 
-        } catch (err) {
-            console.error(err);
+        } catch (error: any) {
+            console.error("Upload failed:", error.response?.data || error.message);
             setErrors({ general: 'Failed to upload documents. Please try again.' });
         } finally {
             setSubmitting(false);

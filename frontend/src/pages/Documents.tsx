@@ -24,7 +24,6 @@ const Documents: React.FC = () => {
     const [search, setSearch] = useState('');
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
-    const BACKEND_URL = "https://maintenance-mwp7.onrender.com";
 
     const fetchDocuments = async () => {
         setLoading(true);
@@ -144,7 +143,7 @@ const Documents: React.FC = () => {
                                     <td className='p-4 text-xs text-nowrap'> 
                                     {doc.files.map((file, index) => (
                                         <div key={index} className='mb-1'>
-                                        <a target='_blank' href={`${BACKEND_URL}${file.path}`} className='text-blue-400 underline hover:text-blue-500'>
+                                        <a target='_blank' href={`${file.path}`} className='text-blue-400 underline hover:text-blue-500'>
                                             {file.filename}
                                         </a>
                                         </div>

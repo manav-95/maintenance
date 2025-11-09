@@ -9,6 +9,7 @@ const documentSchema = new mongoose.Schema({
         path: String,
         size: Number,
         mimetype: String,
+        public_id: String,
     }]
 }, { timestamps: true });
 
