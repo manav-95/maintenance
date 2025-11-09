@@ -88,7 +88,7 @@ const AddSocietyForm: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col h-full p-0.5">
+        <div className="lg-flex flex-col h-full p-0.5">
             <form onSubmit={handleSubmit} className="w-full h-full flex flex-col space-y-6 max-w-7xl bg-card rounded-sm px-6 py-4">
                 {/* Header */}
                 <div className="border-b border-slate-200 pb-4">
