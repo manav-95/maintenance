@@ -13,9 +13,10 @@ import UploadDocument from "./pages/UploadDocument"
 import AddPayments from "./pages/AddPayments"
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminExpense from "./pages/AdminExpense"
-import PaymentHandler from "./pages/PaymentHandler"
+import MyPayments from "./pages/MyPayments"
 import Documents from "./pages/Documents"
 import AdminMaintenanceDashboard from "./pages/AdminMaintenanceDashboard"
+import ManagePayments from "./pages/ManagePayments"
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -77,6 +78,7 @@ const AppRoutes = () => {
           />
           <Route path="upload-documents" element={<UploadDocument />} />
           <Route path="payments" element={<AddPayments/>} />
+          <Route path="manage-payments" element={<ManagePayments/>} />
           <Route path="expenses" element={<AdminExpense/>} />
         </Route>
       )}
@@ -93,7 +95,7 @@ const AppRoutes = () => {
           />
           <Route
             path="my-payments"
-            element={<PaymentHandler/>}
+            element={<MyPayments/>}
           />
           <Route
             path="documents"

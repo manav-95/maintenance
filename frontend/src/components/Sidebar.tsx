@@ -24,6 +24,7 @@ const Sidebar: React.FC = () => {
             { to: '/manage-members', label: 'Manage Members', icon: <FaUsersCog /> },
             { to: '/upload-documents', label: 'Upload Documents', icon: <FaFileUpload /> },
             { to: '/payments', label: 'Payments', icon: <MdPayments /> },
+            { to: '/manage-payments', label: 'Manage Payments', icon: <MdPayments /> },
             { to: '/expenses', label: 'Expenses', icon: <RiCoinsFill /> },
         ],
         member: [

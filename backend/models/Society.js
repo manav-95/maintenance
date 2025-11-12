@@ -28,6 +28,7 @@ const societySchema = new mongoose.Schema({
     },
     manager: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    payments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Payment' }],
 }, {
     timestamps: true
 });

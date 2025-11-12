@@ -7,6 +7,7 @@ import connectDB from './config/dbConfig.js';
 import authRoutes from './routes/auth.routes.js';
 import societyRoutes from './routes/society.routes.js';
 import documentRoutes from './routes/document.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
 
 import path from 'path'
 
@@ -30,6 +31,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/society', societyRoutes);
 app.use('/api/document', documentRoutes);
+app.use('/api/payment', paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
 
