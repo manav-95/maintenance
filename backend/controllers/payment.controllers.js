@@ -64,11 +64,53 @@ export const getAllPaymentsForManager = async (req, res) => {
     }
 }
 
+export const getPaidMembers = async (req, res) => {
+    try {
+        const { paymentId } = req.params;
+        const paymentStatuses = await PaymentStatus.find({ paymentId })
+            .populate({
+                path: 'memberId',
+                model: "User",
+                select: "name email phone flat",
+            })
+            .sort({ updatedAt: 1 })
+
+        if (!paymentStatuses || paymentStatuses.length === 0) {
+            return res.status(404).json({ message: "No Records Found" })
+        }
+
+        //console.log("Populated Data:", paymentStatuses[0]);
+
+
+        // Filter paid members only
+        const paidMembers = paymentStatuses
+            .filter(p => p.status === "paid")
+            .map(p => ({
+                id: p._id,
+                paymentId: p.paymentId,
+                status: p.status,
+                amountPaid: p.amountPaid,
+                paidAt: p.paidAt,
+                payerName: p.memberId?.name || "N/A",
+                payerPhone: p.memberId?.phone || "N/A",
+                payerEmail: p.memberId?.email || "N/A",
+                payerFlat: p.memberId?.flat || "N/A",
+            }));
+
+        return res.status(200).json({ message: "Paid Members Found Successfully", paidMembers })
+
+    } catch (error) {
+        return res.status(400).json({ message: "Failed to Get Paid Members", error: error.message })
+
+    }
+
+}
+
 // Fetch all payments for a member with status
 export const getPaymentsForMember = async (req, res) => {
     try {
         const { memberId } = req.params;
-        
+
         const memberObjectId = new mongoose.Types.ObjectId(memberId);
         const statuses = await PaymentStatus.find({ memberId: memberObjectId })
             .populate("paymentId")

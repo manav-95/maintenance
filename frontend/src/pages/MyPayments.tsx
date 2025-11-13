@@ -62,6 +62,7 @@ const MyPayments = () => {
             ...response,
             paymentStatusId: payment.id,
             amount: payment.amount,
+            memberId: user?.id,
           });
           alert("Payment Successful!")
           setReloadPayments(true)
@@ -155,7 +156,7 @@ const MyPayments = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="text-center py-4 text-slate-500">
+                  <td colSpan={8} className=" text-center py-4 text-slate-500">
                     No pending payments
                   </td>
                 </tr>
@@ -206,14 +207,14 @@ const MyPayments = () => {
                         {p.status}
                       </span>
                     </td>
-                   <td className="px-3 py-3 font-medium">
+                    <td className="px-3 py-3 font-medium">
                       {p?.paidAt ? new Date(p.paidAt).toLocaleDateString("en-IN") : "--"}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="text-center py-4 text-slate-500">
+                  <td colSpan={8} className="text-center py-4 text-slate-500">
                     No completed payments
                   </td>
                 </tr>

@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdPayments } from "react-icons/md";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+
+interface PaidMembers {
+    id: string;
+    status: string;
+    amountPaid: number;
+    paidAt: Date;
+    payerName: string;
+    payerEmail: string;
+    payerPhone: string;
+    payerFlat: string;
+}
 
 interface Payments {
     _id: string;
@@ -10,54 +22,51 @@ interface Payments {
     description: string;
     issueDate: Date;
     dueDate: Date;
-    members: {
-        _id: string;
-        name: string;
-        flatNo: string;
-        status: "Paid" | "Pending";
-        amountPaid: number;
-    }[];
 }
+
+
 
 const ManagePayments = () => {
     const { user } = useAuth();
 
-    const [payments, setPayments] = useState<Payments[]>([
-        {
-            _id: "1",
-            title: "Maintenance June 2025",
-            amount: 500,
-            description: "Monthly maintenance charge",
-            issueDate: new Date("2025-06-01"),
-            dueDate: new Date("2025-06-10"),
-            members: [
-                { _id: "m1", name: "Amit Kumar", flatNo: "A-101", status: "Paid", amountPaid: 500 },
-                { _id: "m2", name: "Sneha Gupta", flatNo: "A-102", status: "Pending", amountPaid: 0 },
-            ],
-        },
-        {
-            _id: "2",
-            title: "Parking Fee 2025",
-            amount: 1000,
-            description: "Annual parking maintenance fee",
-            issueDate: new Date("2025-05-01"),
-            dueDate: new Date("2025-05-20"),
-            members: [
-                { _id: "m3", name: "Rohan Singh", flatNo: "B-201", status: "Paid", amountPaid: 1000 },
-                { _id: "m4", name: "Kavita Joshi", flatNo: "B-202", status: "Pending", amountPaid: 0 },
-                { _id: "m5", name: "Kavita Loshi", flatNo: "B-203", status: "Pending", amountPaid: 0 },
-                { _id: "m6", name: "Kavita Moshi", flatNo: "B-204", status: "Pending", amountPaid: 0 },
-                { _id: "m6", name: "Kavita Moshi", flatNo: "B-204", status: "Pending", amountPaid: 0 },
-                { _id: "m6", name: "Kavita Moshi", flatNo: "B-204", status: "Pending", amountPaid: 0 },
-            ],
-        },
-    ]);
+    const [payments, setPayments] = useState<Payments[] | []>([])
+    const [paidMembers, setPaidMembers] = useState<PaidMembers[] | []>([])
 
     const [expanded, setExpanded] = useState<string | null>(null);
 
     const toggleExpand = (id: string) => {
         setExpanded(expanded === id ? null : id);
     };
+
+    useEffect(() => {
+        const fetchAllManagerCreatedPayments = async () => {
+            try {
+                const res = await axios.get(`${baseUrl}/payment/manager/${user?.id}`)
+                if (res.status === 200) {
+                    setPayments(res.data.payments)
+                } else {
+                    setPayments([])
+                }
+            } catch (error) {
+                console.log("Error Fetching Manager Created payments: ", error)
+            }
+        };
+
+        fetchAllManagerCreatedPayments();
+    }, [])
+
+    const getAllPaidMembers = async (paymentId: string) => {
+        try {
+            const res = await axios.get(`${baseUrl}/payment/manager/paid-members/${paymentId}`);
+            if (res.status === 200) {
+                setPaidMembers(res.data.paidMembers)
+            } else {
+                setPaidMembers([])
+            }
+        } catch (error) {
+            console.log("Error Fetching Paid Members: ", error)
+        }
+    }
 
     return (
         <div className="flex flex-col h-full py-5 px-6">
@@ -83,7 +92,10 @@ const ManagePayments = () => {
                     >
                         {/* Card Header */}
                         <div className="flex justify-between items-center px-5 py-4 cursor-pointer hover:bg-slate-50 transition"
-                            onClick={() => toggleExpand(payment._id)}
+                            onClick={() => {
+                                toggleExpand(payment._id)
+                                getAllPaidMembers(payment._id)
+                            }}
                         >
                             <div>
                                 <h3 className="text-lg font-semibold text-slate-800">
@@ -117,29 +129,39 @@ const ManagePayments = () => {
                                         <thead className="sticky top-0 bg-primary text-card">
                                             <tr className="">
                                                 <th className="px-3 py-2 text-left whitespace-nowrap">Sr. No.</th>
-                                                <th className="px-3 py-2 text-left whitespace-nowrap">Name</th>
+                                                <th className="px-3 py-2 text-left whitespace-nowrap">PayerName</th>
+                                                <th className="px-3 py-2 text-left whitespace-nowrap">Contact</th>
                                                 <th className="px-3 py-2 text-left whitespace-nowrap">Flat No.</th>
                                                 <th className="px-3 py-2 text-left whitespace-nowrap">Status</th>
                                                 <th className="px-3 py-2 text-left whitespace-nowrap">Amount Paid</th>
+                                                <th className="px-3 py-2 text-left whitespace-nowrap">PaidAt</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {payment.members.map((m, i) => (
-                                                <tr key={m._id} className={`${i % 2 ? 'bg-primary/5' : 'bg-card'}`}>
+                                            {paidMembers.map((m, i) => (
+                                                <tr key={m.id} className={`${i % 2 ? 'bg-primary/5' : 'bg-card'}`}>
                                                     <td className="px-3 py-3">{i + 1}.</td>
-                                                    <td className="px-3 py-3 text-nowrap">{m.name}</td>
-                                                    <td className="px-3 py-3">{m.flatNo}</td>
+                                                    <td className="px-3 py-3 text-nowrap text-sm">{m.payerName}</td>
+                                                    <td className="px-3 py-3 text-nowrap text-sm">
+                                                        <p>{m.payerPhone}</p>
+                                                        <p>{m.payerEmail}</p>
+                                                    </td>
+                                                    <td className="px-3 py-3">{m.payerFlat}</td>
                                                     <td className="px-3 py-3">
                                                         <span
-                                                            className={`px-2 py-1 rounded text-xs font-semibold ${m.status === "Paid"
-                                                                    ? "bg-green-100 text-green-700"
-                                                                    : "bg-red-100 text-red-700"
+                                                            className={`px-2 py-1 rounded text-xs font-semibold ${m.status === "paid"
+                                                                ? "bg-green-100 text-green-700"
+                                                                : "bg-red-100 text-red-700"
                                                                 }`}
                                                         >
                                                             {m.status}
                                                         </span>
                                                     </td>
                                                     <td className="px-3 py-3">₹{m.amountPaid}</td>
+                                                        <td className="px-3 py-3 font-medium">
+                                                            {m.paidAt ? new Date(m.paidAt).toLocaleDateString("en-IN") : "--"}
+                                                        </td>
+
                                                 </tr>
                                             ))}
                                         </tbody>
