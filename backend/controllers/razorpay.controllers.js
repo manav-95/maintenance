@@ -33,7 +33,7 @@ export const createOrder = async (req, res) => {
 // ✅ Verify Payment (Frontend sends payment details here)
 export const verifyPayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, paymentStatusId, amount } = req.body;
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, paymentStatusId, amount, memberId } = req.body;
 
         const body = razorpay_order_id + "|" + razorpay_payment_id;
         const expectedSignature = crypto
@@ -52,6 +52,7 @@ export const verifyPayment = async (req, res) => {
         if (!paymentStatus) return res.status(404).json({ message: "PaymentStatus not found" });
 
         paymentStatus.status = "paid";
+        paymentStatus.memberId = memberId;
         paymentStatus.razorpayPaymentId = razorpay_payment_id;
         paymentStatus.amountPaid = amount || 0;
         paymentStatus.paidAt = new Date();
