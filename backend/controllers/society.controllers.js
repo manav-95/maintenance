@@ -177,42 +177,37 @@ export const createSociety = async (req, res) => {
 
     // Link Manager to Society
     manager.society = society._id;
-    const saved = await manager.save();
+    await manager.save();
 
-    if (saved) {
+    res.status(201).json({ message: 'Society and manager created', society, manager });
 
-      const html = buildManagerInviteEmail({
-        managerName: manager.name,
-        managerEmail: manager.email,
-        managerPassword: managerPassword, // consider sending a reset link instead in prod
-        societyName: society.name,
-        loginUrl: process.env.APP_URL
-      });
 
-      const text = buildManagerInviteText({
-        managerName: manager.name,
-        managerEmail: manager.email,
-        managerPassword: managerPassword,
-        societyName: society.name,
-        loginUrl: process.env.APP_URL
-      });
+    const html = buildManagerInviteEmail({
+      managerName: manager.name,
+      managerEmail: manager.email,
+      managerPassword: managerPassword,
+      societyName: society.name,
+      loginUrl: process.env.APP_URL
+    });
 
-      try {
-        const info = await transporter.sendMail({
-          from: `"Maintenance PRO" <${process.env.EMAIL_USER}>`,
-          to: managerEmail,
-          subject: "Manager Credentials",
-          html,
-          text,
-        });
+    const text = buildManagerInviteText({
+      managerName: manager.name,
+      managerEmail: manager.email,
+      managerPassword: managerPassword,
+      societyName: society.name,
+      loginUrl: process.env.APP_URL
+    });
 
-        console.log("Message sent:", info.response);
-      } catch (mailError) {
-        console.error("❌ Failed to send email:", mailError);
-      }
-    }
 
-    return res.status(201).json({ message: 'Society and manager created', society, manager });
+     transporter.sendMail({
+      from: `"Maintenance PRO" <${process.env.EMAIL_USER}>`,
+      to: managerEmail,
+      subject: "Manager Credentials",
+      html,
+      text,
+    }).then(info => console.log("📧 Email sent:", info.response))
+      .catch(err => console.error("❌ Email failed:", err));
+
 
 
   } catch (error) {
@@ -268,42 +263,41 @@ export const addSocietyMembers = async (req, res) => {
 
     await newMember.save();
 
-    await society.members.push(newMember._id);
+     society.members.push(newMember._id);
     await society.save();
 
-    try {
-      const info = await transporter.sendMail({
-        from: `"Maintenance PRO" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: "Member Credentials",
-        html: `<p>Welcome ${fullName},</p>
-                <p>You have been added as a member to the society "${society.name}".</p>
-                <p>Your credentials are as follows:</p> 
-                <ul>
-                <li>Email: ${email}</li>
-                <li>Password: ${password}</li>
-                </ul>
-                <p>Please log in at ${process.env.APP_URL} and change your password after your first login.</p>
-                <p>If you did not expect this email, please contact your society manager.</p>
-          `,
-        text: `Welcome ${fullName}, 
-                You have been added as a member to the society "${society.name}".
-                Your credentials are as follows:
-                Email: ${email}
-                Password: ${password}
-                Please log in at ${process.env.APP_URL} and change your password after your first login.
-                If you did not expect this email, please contact your society manager.
-          `,
-      });
-
-      console.log("Message sent:", info.response);
-    } catch (mailError) {
-      console.error("❌ Failed to send email:", mailError);
-    }
+       res.status(201).json({ message: 'Member added successfully', member: newMember });
 
 
+   
+      //  transporter.sendMail({
+      //   from: `"Maintenance PRO" <${process.env.EMAIL_USER}>`,
+      //   to: email,
+      //   subject: "Member Credentials",
+      //   html: `<p>Welcome ${fullName},</p>
+      //           <p>You have been added as a member to the society "${society.name}".</p>
+      //           <p>Your credentials are as follows:</p> 
+      //           <ul>
+      //           <li>Email: ${email}</li>
+      //           <li>Password: ${password}</li>
+      //           </ul>
+      //           <p>Please log in at ${process.env.APP_URL} and change your password after your first login.</p>
+      //           <p>If you did not expect this email, please contact your society manager.</p>
+      //     `,
+      //   text: `Welcome ${fullName}, 
+      //           You have been added as a member to the society "${society.name}".
+      //           Your credentials are as follows:
+      //           Email: ${email}
+      //           Password: ${password}
+      //           Please log in at ${process.env.APP_URL} and change your password after your first login.
+      //           If you did not expect this email, please contact your society manager.
+      //     `,
+      // }).then(info => console.log("📧 Email sent:", info.response))
+      // .catch(err => console.error("❌ Email failed:", err));
 
-    return res.status(201).json({ message: 'Member added successfully', member: newMember });
+
+
+
 
   } catch (error) {
     console.error('Failed To Add Society Member:', error);
